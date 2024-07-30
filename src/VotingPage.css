@@ -1,0 +1,99 @@
+.nav {
+    background-color: #000000;
+    color: aliceblue;
+    padding: 5px;
+    position: fixed;
+    top: 0;
+    width: 99.7vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav h1{
+    background-color: #000000;
+    
+  }
+  .nav div{
+    display: inline-block;
+  }
+
+
+.body{
+  color: #000;
+  padding-top: 100px;
+}
+
+ .right{
+    margin-right: 25px;
+    background-color: #000;
+ }
+.castVote{
+  color: #ddd;
+  background: #000000;
+  margin: 2VW;
+  border-radius: 5px;
+  font-size: large;
+  padding: 2px;
+}
+.castVote:hover{
+  box-shadow: 0 0 2px #000000;
+  cursor: pointer;
+}
+input[type="radio"]:focus{
+  box-shadow: none;
+  background-color: blue;
+  color: aqua;
+}
+  *{
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu-item {
+    color: white;
+    background-color: #000000;
+    margin-right: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 0;
+  }
+  
+  .dropdown {
+    display: none; /* Hide dropdown by default */
+    position: absolute;
+    top: 40px; /* Adjust based on the height of your navbar */
+    right: 2;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    list-style: none;
+    z-index: 1000;
+    color: #000000;
+
+  }
+  
+  .dropdown li {
+    margin: 0;
+    border: 1px solid rgba(0, 0, 0, 0.425)
+
+    
+  }
+  
+  .dropdown p {
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .dropdown p:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Show dropdown when .menu-item is hovered */
+  .menu-item:focus + .dropdown {
+    display: block;
+  }
+  .dropdown:hover {
+    display: block;
+  }
