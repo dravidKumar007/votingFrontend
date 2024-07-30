@@ -20,7 +20,7 @@ const login = (e)=>{
     password:password
   }
   console.log(data);
-  axios.get("http://localhost:3000/api/users/login",{ params: data })
+  axios.get("https://votingbackend-qff5.onrender.com/api/users/login",{ params: data })
   .then((response)=>{
     console.log(response.data.name);
     localStorage.setItem('name', response.data.name);

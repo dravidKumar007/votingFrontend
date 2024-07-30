@@ -14,7 +14,7 @@ const VotingPage = () => {
    const[name,setName] = useState('');
    const [party,setParty] = useState([]);
    const [selectedValue, setSelectedValue] = useState(null);
-
+   const [disabled, setDisabled] = useState(false);
    
    useEffect( () => {
       const loadData =  () => {
@@ -50,11 +50,11 @@ loadData();
     email:email
   }
 
-  axios("http://localhost:3000/api/auth/token",{param:data}).then((response)=>{
+  axios("https://votingbackend-qff5.onrender.com/api/auth/token",{param:data}).then((response)=>{
     console.log(response.data);
     setToken(response.data.token);
 
-    axios.get('http://localhost:3000/api/voting/getVoter', {
+    axios.get('https://votingbackend-qff5.onrender.com/api/voting/getVoter', {
       headers: {
         Authorization: `Bearer ${response.data.token}`,
       },
@@ -87,18 +87,20 @@ if (response.data[1].some(emailList => emailList.includes( localStorage.getItem(
  function castVote(e){
   e.preventDefault();
 
+  setDisabled(true)
+
 var data={
  partyName:selectedValue,
  voterEmail:email
 };
 
-axios.post('http://localhost:3000/api/voting/castvote',data, {
+axios.post('https://votingbackend-qff5.onrender.com/api/voting/castvote',data, {
   headers: {
     Authorization: `Bearer ${token}`,
   },
 }).then(response=>{console.log(response.data);
   navigate('/success')
-}).catch(e=>console.log(e))
+}).catch(e=>{console.log(e);setDisabled(false)})
  }   
 
 function logout(){
@@ -180,9 +182,14 @@ function logout(){
         ))}
         </table>
  
- <button type='submit' className='castVote'>
-  Castvote
- </button>
+        <button
+        style={disabled ? {backgroundColor:'red',cursor:'not-allowed'} : {}}
+        onClick={() => alert('Button Clicked')}
+        className='castVote'
+        disabled={disabled}
+          > 
+          {disabled ? 'Wait..':'Cast Vote'}
+          </button>
 
 
  

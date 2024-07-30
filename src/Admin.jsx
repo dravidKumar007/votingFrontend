@@ -12,12 +12,15 @@ const Admin = () => {
   const [newPartyName, setNewPartyName] = useState('');
   const [deletePartyName, setDeletePartyName] = useState('');
 
+  const[disableAdd, setDisableAdd] = useState(false);
+  const[disableDel, setDisableDel] = useState(false);
+
   const login = async (e) => {
     e.preventDefault();
     if (name === 'admin' && password === 'admin@123') {
       try {
         // Request token
-        const tokenResponse = await axios.get('http://localhost:3000/api/auth/token', {
+        const tokenResponse = await axios.get('https://votingbackend-qff5.onrender.com/api/auth/token', {
           params: {
             email: 'admin@gmail.com',
             password: 'admin@123'
@@ -28,7 +31,7 @@ const Admin = () => {
         setdisplay2('block');
 
         // Fetch party data
-        const partyResponse = await axios.get('http://localhost:3000/api/admin/getparty', {
+        const partyResponse = await axios.get('https://votingbackend-qff5.onrender.com/api/admin/getparty', {
           headers: {
             Authorization: `Bearer ${tokenResponse.data.token}`,
           },
@@ -50,8 +53,9 @@ const Admin = () => {
 
   const handleAddParty = async (e) => {
     e.preventDefault();
+    setDisableAdd(true);
     try {
-     var res= await axios.post('http://localhost:3000/api/admin/addparty', { partyName: newPartyName }, {
+     var res= await axios.post('https://votingbackend-qff5.onrender.com/api/admin/addparty', { partyName: newPartyName }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -60,7 +64,7 @@ const Admin = () => {
       console.log(res.data);
 
       setNewPartyName('');
-      const partyResponse = await axios.get('http://localhost:3000/api/admin/getparty', {
+      const partyResponse = await axios.get('https://votingbackend-qff5.onrender.com/api/admin/getparty', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -70,23 +74,32 @@ const Admin = () => {
         votes: partyResponse.data['1'][index],
       }));
       setParty(rows);
+      setDisableAdd(false);
     } catch (err) {
+      setDisableAdd(false);
       console.error(err);
     }
   };
 
   const handleDeleteParty = async (e) => {
     e.preventDefault();
+    setDisableDel(true);
     try {
-     var res= await axios.delete('http://localhost:3000/api/admin/deleteparty', { partyName: deletePartyName }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+
+      console.log(deletePartyName)
+     var res= await axios.delete('https://votingbackend-qff5.onrender.com/api/admin/deleteparty', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      data: {
+        partyName: deletePartyName
+      }
+    });
 
       console.log(res.data);
       setDeletePartyName('');
-      const partyResponse = await axios.get('http://localhost:3000/api/admin/getparty', {
+      const partyResponse = await axios.get('https://votingbackend-qff5.onrender.com/api/admin/getparty', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -96,8 +109,10 @@ const Admin = () => {
         votes: partyResponse.data['1'][index],
       }));
       setParty(rows);
+      setDisableDel(false)
     } catch (err) {
       console.error(err);
+      setDisableDel(false);
     }
   };
 
@@ -165,7 +180,9 @@ const Admin = () => {
             value={newPartyName}
             onChange={(e) => setNewPartyName(e.target.value)}
             />
-          <button type='submit'>Add Party</button>
+          <button      disabled={disableAdd}
+          style={disableAdd?{background:'red',cursor:'not-allowed'}:{background:'red'}}
+          type='submit'>{disableAdd?'wait..':'Add Party'}</button>
         </form>
 
         <form className='delete' onSubmit={handleDeleteParty}>
@@ -175,7 +192,10 @@ const Admin = () => {
             value={deletePartyName}
             onChange={(e) => setDeletePartyName(e.target.value)}
             />
-          <button type='submit'>Delete Party</button>
+          <button 
+         disabled={disableDel}
+         style={disableDel?{background:'blue',cursor:'not-allowed'}:{background:'blue'}}
+          type='submit'>{disableDel?'wait..':'Delete Party'}</button>
         </form>
       </center>
             </div>
